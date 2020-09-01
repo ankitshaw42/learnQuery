@@ -1,5 +1,6 @@
-var domSelector = function(selectors) {
+var domSelector = function (selectors) {
   'use strict';
 
-  //code goes here
+  var items = document.querySelectorAll(selectors);
+  return Array.prototype.slice.call(items);
 };
