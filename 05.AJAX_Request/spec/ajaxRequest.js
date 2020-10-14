@@ -1,9 +1,9 @@
 /*global ajaxReq*/
 
-describe('AjaxRequest', function() {
+describe('AjaxRequest', function () {
   'use strict';
 
-  beforeEach(function() {
+  beforeEach(function () {
     jasmine.Ajax.install();
 
     this.onSuccessSpy = jasmine.createSpy('success');
@@ -12,24 +12,24 @@ describe('AjaxRequest', function() {
 
     jasmine.Ajax.stubRequest('/infinum/index').andReturn({
       status: 200,
-      responseText: '{ "response": "incredible cool things" }'
+      responseText: '{ "response": "incredible cool things" }',
     });
 
     jasmine.Ajax.stubRequest('/infinum/not-found').andReturn({
-      "status": 404,
-      "responseText": 'page not found'
+      status: 404,
+      responseText: 'page not found',
     });
   });
 
-  afterEach(function() {
+  afterEach(function () {
     jasmine.Ajax.uninstall();
   });
 
-  it('should make a successful ajax request', function() {
+  it('should make a successful ajax request', function () {
     ajaxReq('/infinum/index', {
       success: this.onSuccessSpy,
       complete: this.onCompleteSpy,
-      failure: this.onFailureSpy
+      failure: this.onFailureSpy,
     });
 
     expect(this.onSuccessSpy).toHaveBeenCalled();
@@ -37,12 +37,12 @@ describe('AjaxRequest', function() {
     expect(this.onCompleteSpy).toHaveBeenCalled();
   });
 
-  it('should make POST ajax request', function() {
+  it('should make POST ajax request', function () {
     ajaxReq('/infinum/index', {
       success: this.onSuccessSpy,
       complete: this.onCompleteSpy,
       failure: this.onFailureSpy,
-      method: 'POST'
+      method: 'POST',
     });
 
     expect(jasmine.Ajax.requests.mostRecent().method).toBe('POST');
@@ -51,12 +51,12 @@ describe('AjaxRequest', function() {
     expect(this.onCompleteSpy).toHaveBeenCalled();
   });
 
-  it('should call a custom function with proper context on failure', function() {
+  it('should call a custom function with proper context on failure', function () {
     var context = {
-      secretUnicorn: 'Glumpsy'
+      secretUnicorn: 'Glumpsy',
     };
 
-    var onFailure = function(xhr, status, responseText) {
+    var onFailure = function (xhr, status, responseText) {
       expect(status).toBe(404);
       expect(responseText).toBe('page not found');
       expect(this).toBe(context);
@@ -64,7 +64,7 @@ describe('AjaxRequest', function() {
     };
 
     var methods = {
-      onFailure: onFailure
+      onFailure: onFailure,
     };
 
     spyOn(methods, 'onFailure').and.callFake(onFailure);
@@ -73,7 +73,7 @@ describe('AjaxRequest', function() {
       success: this.onSuccessSpy,
       failure: methods.onFailure,
       complete: this.onCompleteSpy,
-      context: context
+      context: context,
     });
 
     expect(methods.onFailure).toHaveBeenCalled();
@@ -81,12 +81,12 @@ describe('AjaxRequest', function() {
     expect(this.onSuccessSpy).not.toHaveBeenCalled();
   });
 
-  it('should call a custom function with proper context on success', function() {
+  it('should call a custom function with proper context on success', function () {
     var context = {
-      secretUnicorn: 'Glumpsy'
+      secretUnicorn: 'Glumpsy',
     };
 
-    var onSuccess = function(data, status, xhr) {
+    var onSuccess = function (data, status, xhr) {
       expect(status).toBe(200);
       expect(data.response).toBe('incredible cool things');
       expect(this).toBe(context);
@@ -94,7 +94,7 @@ describe('AjaxRequest', function() {
     };
 
     var methods = {
-      onSuccess: onSuccess
+      onSuccess: onSuccess,
     };
 
     spyOn(methods, 'onSuccess').and.callFake(onSuccess);
@@ -103,7 +103,7 @@ describe('AjaxRequest', function() {
       success: methods.onSuccess,
       failure: this.onFailureSpy,
       complete: this.onCompleteSpy,
-      context: context
+      context: context,
     });
 
     expect(methods.onSuccess).toHaveBeenCalled();
@@ -111,19 +111,19 @@ describe('AjaxRequest', function() {
     expect(this.onFailureSpy).not.toHaveBeenCalled();
   });
 
-  it('should call a custom function with proper context when request is completed', function() {
+  it('should call a custom function with proper context when request is completed', function () {
     var context = {
-      secretUnicorn: 'Glumpsy'
+      secretUnicorn: 'Glumpsy',
     };
 
-    var onComplete = function(xhr, status) {
+    var onComplete = function (xhr, status) {
       expect(status).toBe(200);
       expect(this).toBe(context);
       expect(this.secretUnicorn).toBe('Glumpsy');
     };
 
     var methods = {
-      onComplete: onComplete
+      onComplete: onComplete,
     };
 
     spyOn(methods, 'onComplete').and.callFake(onComplete);
@@ -132,7 +132,7 @@ describe('AjaxRequest', function() {
       success: this.onSuccessSpy,
       failure: this.onFailureSpy,
       complete: methods.onComplete,
-      context: context
+      context: context,
     });
 
     expect(methods.onComplete).toHaveBeenCalled();
